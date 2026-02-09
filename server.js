@@ -35,3 +35,14 @@ app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
 
+const { execSync } = require("child_process");
+
+app.get("/health", (req, res) => {
+  try {
+    const v = execSync("soffice --version", { encoding: "utf8" });
+    res.json({ ok: true, libreoffice: v.trim() });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
